@@ -25,10 +25,10 @@ class default_1 {
         if (route.children) {
             childrenParams = this.generateUrlByRoute(route.children, current + 1);
         }
-        const path = route.frame + "_" + (childrenParams ? childrenParams.path : "");
-        let query = Object.keys(route.params)
+        const path = route.frame + (childrenParams ? "_" + childrenParams.path : "");
+        let query = route.params ? Object.keys(route.params)
             .map((paramName) => "f" + current.toString() +
-            "_" + paramName + "=" + encodeURIComponent(route.params[paramName]));
+            "_" + paramName + "=" + encodeURIComponent(route.params[paramName])) : [];
         if (childrenParams) {
             query = query.concat(childrenParams.query);
         }

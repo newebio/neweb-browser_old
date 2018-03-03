@@ -11,7 +11,15 @@ class ReactOnemitter extends React.Component {
         const state = {};
         for (const propName of Object.keys(nextProps.props)) {
             if (this.state[propName] !== nextProps.props[propName]) {
-                state[propName] = nextProps.props[propName];
+                if (nextProps.props[propName] instanceof onemitter_1.Onemitter) {
+                    this.emitters[propName].onemitter.off(this.emitters[propName].cb);
+                    state[propName] = nextProps.props[propName].get();
+                    this.emitters[propName].onemitter = nextProps.props[propName];
+                    this.emitters[propName].onemitter.on(this.emitters[propName].cb);
+                }
+                else {
+                    state[propName] = nextProps.props[propName];
+                }
             }
         }
         if (nextProps.onemitter !== this.props.onemitter) {

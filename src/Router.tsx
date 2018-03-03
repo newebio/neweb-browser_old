@@ -23,7 +23,7 @@ class Router {
     }
     public async navigate(href: string, replace?: boolean) {
         const route = await this.config.configuration.resolveRoute({ url: href });
-        this.navigateToRoute(route);
+        await this.navigateToRoute(route);
         if (!replace) {
             window.history.pushState(route, "", href);
         } else {
@@ -35,20 +35,33 @@ class Router {
         const currentFRoute = await this.resolveFRoute(route);
         this.currentRouteEmitter.emit(currentFRoute);
     }
-    public resolveFRouteWithNewParams(params: any, level: number) {
+    public async resolveFRouteWithNewParams(params: any, level: number) {
         const route = this.getRouteByLevel(level);
-        return this.resolveFRoute({ ...route, params });
+        let currentRoute = this.currentRoute;
+        for (let i = 1; i < level + 1; i++) {
+            currentRoute = currentRoute.children as IRoute;
+        }
+        currentRoute.params = params;
+        const fRoute = await this.resolveFRoute({ ...route, params });
+        this.updateHistoryState();
+        return fRoute;
+    }
+    public updateHistoryState() {
+        window.history.replaceState(this.currentRoute, "", this.config.configuration.generateUrl(this.currentRoute));
     }
     public async resolveFRoute(route: IRoute): Promise<IFRoute> {
+        const params = route.params || {};
         const FrameClass = await this.config.configuration.resolveFrameClass(route.frame);
         const DataClass = await this.config.configuration.resolveFrameDataClass(route.frame);
-        const data = new DataClass({ params: route.params, context: { ...this.config.context } });
+        const ActionsClass = await this.config.configuration.resolveActionsClass(route.frame);
+        const data = new DataClass({ params, context: this.config.context });
         const initialData = data.get();
         return {
             frame: FrameClass,
             frameName: route.frame,
+            actions: new ActionsClass({ params, context: this.config.context }),
             data,
-            params: route.params,
+            params,
             initialData,
             children: route.children ? await this.resolveFRoute(route.children) : undefined,
         };

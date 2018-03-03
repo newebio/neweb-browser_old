@@ -8,6 +8,8 @@ var Neweb_2 = require("./src/Neweb");
 exports.Neweb = Neweb_2.default;
 __export(require("./src/Neweb"));
 __export(require("./src/PackConfiguration"));
+var NavigateActions_1 = require("./src/NavigateActions");
+exports.NavigateActions = NavigateActions_1.default;
 var PackConfiguration_1 = require("./src/PackConfiguration");
 exports.PackConfiguration = PackConfiguration_1.default;
 var Link_1 = require("./src/Link");

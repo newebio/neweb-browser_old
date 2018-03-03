@@ -28,7 +28,7 @@ class Router {
     navigate(href, replace) {
         return __awaiter(this, void 0, void 0, function* () {
             const route = yield this.config.configuration.resolveRoute({ url: href });
-            this.navigateToRoute(route);
+            yield this.navigateToRoute(route);
             if (!replace) {
                 window.history.pushState(route, "", href);
             }
@@ -45,20 +45,35 @@ class Router {
         });
     }
     resolveFRouteWithNewParams(params, level) {
-        const route = this.getRouteByLevel(level);
-        return this.resolveFRoute(Object.assign({}, route, { params }));
+        return __awaiter(this, void 0, void 0, function* () {
+            const route = this.getRouteByLevel(level);
+            let currentRoute = this.currentRoute;
+            for (let i = 1; i < level + 1; i++) {
+                currentRoute = currentRoute.children;
+            }
+            currentRoute.params = params;
+            const fRoute = yield this.resolveFRoute(Object.assign({}, route, { params }));
+            this.updateHistoryState();
+            return fRoute;
+        });
+    }
+    updateHistoryState() {
+        window.history.replaceState(this.currentRoute, "", this.config.configuration.generateUrl(this.currentRoute));
     }
     resolveFRoute(route) {
         return __awaiter(this, void 0, void 0, function* () {
+            const params = route.params || {};
             const FrameClass = yield this.config.configuration.resolveFrameClass(route.frame);
             const DataClass = yield this.config.configuration.resolveFrameDataClass(route.frame);
-            const data = new DataClass({ params: route.params, context: Object.assign({}, this.config.context) });
+            const ActionsClass = yield this.config.configuration.resolveActionsClass(route.frame);
+            const data = new DataClass({ params, context: this.config.context });
             const initialData = data.get();
             return {
                 frame: FrameClass,
                 frameName: route.frame,
+                actions: new ActionsClass({ params, context: this.config.context }),
                 data,
-                params: route.params,
+                params,
                 initialData,
                 children: route.children ? yield this.resolveFRoute(route.children) : undefined,
             };

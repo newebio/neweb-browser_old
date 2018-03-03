@@ -6,6 +6,7 @@ import Router from "./Router";
 
 export default class extends React.Component<{
     router: Router;
+    context: any;
 }, {
         currentRoute?: IFRoute;
     }> {
@@ -38,6 +39,7 @@ export default class extends React.Component<{
                 onemitter: route.data,
                 component: route.frame,
                 props: {
+                    actions: route.actions,
                     params: route.params,
                     data: route.initialData,
                     setParams: (params: any) => {

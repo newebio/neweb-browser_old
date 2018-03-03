@@ -17,8 +17,17 @@ class PackConfiguration {
         }
         return this.config.frames[name].data;
     }
+    resolveActionsClass(name) {
+        if (!this.config.frames[name]) {
+            throw new Error("Unknown frame " + name);
+        }
+        return this.config.frames[name].actions;
+    }
     resolveRoute(request) {
         return this.router.resolve(request);
+    }
+    generateUrl(route) {
+        return this.router.generate(route);
     }
 }
 exports.default = PackConfiguration;

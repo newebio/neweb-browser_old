@@ -43,6 +43,7 @@ class default_1 extends React.Component {
             onemitter: route.data,
             component: route.frame,
             props: {
+                actions: route.actions,
                 params: route.params,
                 data: route.initialData,
                 setParams: (params) => {

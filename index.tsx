@@ -3,17 +3,26 @@ import Neweb from "./src/Neweb";
 export { default as Neweb } from "./src/Neweb";
 export * from "./src/Neweb";
 export * from "./src/PackConfiguration";
+export { default as NavigateActions } from "./src/NavigateActions";
 export { default as PackConfiguration } from "./src/PackConfiguration";
 export { default as Link } from "./src/Link";
 export { default as UrlRouterBase } from "./src/UrlRouterBase";
 export * from "./src/UrlRouterBase";
+export interface INavigateActionsProps {
+    navigate(url: string, replace?: boolean): void;
+}
 export interface IContextRouter {
     navigate: (to: string, params?: any) => void;
+}
+export type IAction = (...args: any[]) => void;
+export interface IActions {
+    [index: string]: IAction;
 }
 export interface IFRoute {
     frame: React.ComponentClass<any>;
     frameName: string;
     data: Onemitter<any>;
+    actions: IActions;
     initialData: any;
     params: any;
     children?: IFRoute;
@@ -24,8 +33,10 @@ export interface IRouter {
 }
 export interface IConfiguration {
     resolveRoute(request: IRequest): IRoute;
+    generateUrl(route: IRoute): string;
     resolveFrameClass(frame: string): React.ComponentClass<any>;
     resolveFrameDataClass(frame: string): new (params?: any) => Onemitter<any>;
+    resolveActionsClass(frame: string): new (params?: any) => IActions;
 }
 export interface IRequest {
     url: string;

@@ -16,10 +16,12 @@ class Neweb {
     constructor(configuration, options) {
         this.configuration = configuration;
         this.options = options;
+        this.context = this.options.context || {};
         this.router = new Router_1.default({
             configuration: this.configuration,
-            context: options.context,
+            context: this.context,
         });
+        this.context.router = this.router;
     }
     getRouter() {
         return this.router;
@@ -32,6 +34,7 @@ class Neweb {
             this.router.run(request);
             ReactDOM.render(React.createElement(RouterComponent_1.default, {
                 router: this.router,
+                context: this.context,
             }), element);
         });
     }
