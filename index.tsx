@@ -1,5 +1,6 @@
 import { Onemitter } from "onemitter";
 import Neweb from "./src/Neweb";
+export { Onemitter as DataSource } from "onemitter";
 export { default as Neweb } from "./src/Neweb";
 export * from "./src/Neweb";
 export * from "./src/PackConfiguration";
@@ -25,7 +26,7 @@ export interface IActions {
 export interface IFRoute {
     frame: React.ComponentClass<any>;
     frameName: string;
-    data: Onemitter<any>;
+    data: IDataSource<any>;
     actions: IActions;
     initialData: any;
     params: any;

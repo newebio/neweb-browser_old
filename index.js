@@ -4,6 +4,8 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const Neweb_1 = require("./src/Neweb");
+var onemitter_1 = require("onemitter");
+exports.DataSource = onemitter_1.Onemitter;
 var Neweb_2 = require("./src/Neweb");
 exports.Neweb = Neweb_2.default;
 __export(require("./src/Neweb"));

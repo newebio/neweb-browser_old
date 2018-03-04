@@ -1,5 +1,5 @@
 import o, { Onemitter } from "onemitter";
-import { IConfiguration, IFrame, IFRoute, IRoute } from "..";
+import { IConfiguration, IDataSource, IFrame, IFRoute, IRoute } from "..";
 
 export interface IRouterConfig {
     configuration: IConfiguration;
@@ -26,6 +26,16 @@ class Router {
     }
     public navigate(href: string) {
         return this.navigateWithInitialData(href);
+    }
+    public async waitInitialData() {
+        let currentFRoute: IFRoute | undefined = await this.currentRouteEmitter.wait();
+        const datas: Array<IDataSource<any>> = [];
+        while (!!currentFRoute) {
+            datas.push(currentFRoute.data);
+            currentFRoute = currentFRoute.children;
+        }
+        const promises = datas.map((d) => d.wait());
+        await Promise.all(promises);
     }
     public async resolveFRouteWithNewParams(params: any, level: number) {
         const route = this.getRouteByLevel(level);
