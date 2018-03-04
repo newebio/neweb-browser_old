@@ -13,11 +13,11 @@ export default class extends React.Component<{
     protected subscriber: any;
     protected framesEmitters: Array<Onemitter<IFRoute | undefined>> = [];
     public async componentWillMount() {
-        this.setState({ currentRoute: this.props.router.getEmitter().get() });
+        this.setState({ currentRoute: this.props.router.getCurrentRouteEmitter().get() });
         this.subscriber = (currentRoute: IFRoute) => {
             this.setState({ currentRoute });
         };
-        this.props.router.getEmitter().on(this.subscriber);
+        this.props.router.getCurrentRouteEmitter().on(this.subscriber);
     }
     public render() {
         if (!this.state.currentRoute) {

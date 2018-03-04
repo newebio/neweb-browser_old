@@ -1,10 +1,9 @@
-import { Onemitter } from "onemitter";
-import { IActions, IConfiguration, IRequest, IRoute, IRouter } from "./..";
+import { IActions, IConfiguration, IDataSource, IFrame, IRequest, IRoute, IRouter } from "./..";
 export interface IPackConfigurationConfig {
     frames: {
         [index: string]: {
             view: React.ComponentClass<any>;
-            data: new (params?: any) => Onemitter<any>;
+            data: new (params?: any) => IDataSource<any>;
             actions: new (params?: any) => IActions;
         };
     };
@@ -15,23 +14,11 @@ class PackConfiguration implements IConfiguration {
     constructor(protected config: IPackConfigurationConfig) {
         this.router = new this.config.router();
     }
-    public resolveFrameClass(name: string) {
+    public resolveFrame(name: string): IFrame {
         if (!this.config.frames[name]) {
             throw new Error("Unknown frame " + name);
         }
-        return this.config.frames[name].view;
-    }
-    public resolveFrameDataClass(name: string) {
-        if (!this.config.frames[name]) {
-            throw new Error("Unknown frame " + name);
-        }
-        return this.config.frames[name].data;
-    }
-    public resolveActionsClass(name: string) {
-        if (!this.config.frames[name]) {
-            throw new Error("Unknown frame " + name);
-        }
-        return this.config.frames[name].actions;
+        return { ...this.config.frames[name], name };
     }
     public resolveRoute(request: IRequest) {
         return this.router.resolve(request);

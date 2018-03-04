@@ -5,6 +5,9 @@ export * from "./src/Neweb";
 export * from "./src/PackConfiguration";
 export { default as NavigateActions } from "./src/NavigateActions";
 export { default as PackConfiguration } from "./src/PackConfiguration";
+export { default as RouterComponent } from "./src/RouterComponent";
+export { default as BrowserRouter } from "./src/BrowserRouter";
+export { default as Router } from "./src/Router";
 export { default as Link } from "./src/Link";
 export { default as UrlRouterBase } from "./src/UrlRouterBase";
 export * from "./src/UrlRouterBase";
@@ -34,9 +37,14 @@ export interface IRouter {
 export interface IConfiguration {
     resolveRoute(request: IRequest): IRoute;
     generateUrl(route: IRoute): string;
-    resolveFrameClass(frame: string): React.ComponentClass<any>;
-    resolveFrameDataClass(frame: string): new (params?: any) => Onemitter<any>;
-    resolveActionsClass(frame: string): new (params?: any) => IActions;
+    resolveFrame(frame: string): IFrame | Promise<IFrame>;
+}
+export type IDataSource<T> = Onemitter<T>;
+export interface IFrame {
+    name: string;
+    view: React.ComponentClass<any>;
+    data: new (params?: any) => IDataSource<any>;
+    actions: new (params?: any) => IActions;
 }
 export interface IRequest {
     url: string;

@@ -5,23 +5,11 @@ class PackConfiguration {
         this.config = config;
         this.router = new this.config.router();
     }
-    resolveFrameClass(name) {
+    resolveFrame(name) {
         if (!this.config.frames[name]) {
             throw new Error("Unknown frame " + name);
         }
-        return this.config.frames[name].view;
-    }
-    resolveFrameDataClass(name) {
-        if (!this.config.frames[name]) {
-            throw new Error("Unknown frame " + name);
-        }
-        return this.config.frames[name].data;
-    }
-    resolveActionsClass(name) {
-        if (!this.config.frames[name]) {
-            throw new Error("Unknown frame " + name);
-        }
-        return this.config.frames[name].actions;
+        return Object.assign({}, this.config.frames[name], { name });
     }
     resolveRoute(request) {
         return this.router.resolve(request);

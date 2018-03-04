@@ -18,11 +18,11 @@ class default_1 extends React.Component {
     }
     componentWillMount() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.setState({ currentRoute: this.props.router.getEmitter().get() });
+            this.setState({ currentRoute: this.props.router.getCurrentRouteEmitter().get() });
             this.subscriber = (currentRoute) => {
                 this.setState({ currentRoute });
             };
-            this.props.router.getEmitter().on(this.subscriber);
+            this.props.router.getCurrentRouteEmitter().on(this.subscriber);
         });
     }
     render() {

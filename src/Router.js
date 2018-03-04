@@ -12,29 +12,23 @@ const onemitter_1 = require("onemitter");
 class Router {
     constructor(config) {
         this.config = config;
+        this.initialRequest = {
+            url: "/",
+        };
         this.currentRouteEmitter = onemitter_1.default();
     }
-    getEmitter() {
+    getCurrentRouteEmitter() {
         return this.currentRouteEmitter;
     }
-    run(initialRequest) {
+    run() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.navigate(initialRequest.url, false);
-            window.addEventListener("popstate", (e) => {
-                this.navigateToRoute(e.state);
-            }, false);
+            yield this.navigate(this.initialRequest.url);
         });
     }
-    navigate(href, replace) {
+    navigate(href) {
         return __awaiter(this, void 0, void 0, function* () {
-            const route = yield this.config.configuration.resolveRoute({ url: href });
-            yield this.navigateToRoute(route);
-            if (!replace) {
-                window.history.pushState(route, "", href);
-            }
-            else {
-                window.history.replaceState(route, "", href);
-            }
+            this.currentRoute = yield this.config.configuration.resolveRoute({ url: href });
+            yield this.navigateToRoute(this.currentRoute);
         });
     }
     navigateToRoute(route) {
@@ -53,31 +47,37 @@ class Router {
             }
             currentRoute.params = params;
             const fRoute = yield this.resolveFRoute(Object.assign({}, route, { params }));
-            this.updateHistoryState();
             return fRoute;
         });
     }
-    updateHistoryState() {
-        window.history.replaceState(this.currentRoute, "", this.config.configuration.generateUrl(this.currentRoute));
-    }
     resolveFRoute(route) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const params = route.params || {};
-            const FrameClass = yield this.config.configuration.resolveFrameClass(route.frame);
-            const DataClass = yield this.config.configuration.resolveFrameDataClass(route.frame);
-            const ActionsClass = yield this.config.configuration.resolveActionsClass(route.frame);
-            const data = new DataClass({ params, context: this.config.context });
-            const initialData = data.get();
-            return {
-                frame: FrameClass,
-                frameName: route.frame,
-                actions: new ActionsClass({ params, context: this.config.context }),
-                data,
-                params,
-                initialData,
-                children: route.children ? yield this.resolveFRoute(route.children) : undefined,
-            };
-        });
+        // Resolving frame view component
+        const FrameResolver = this.config.configuration.resolveFrame(route.frame);
+        if (FrameResolver instanceof Promise) {
+            return FrameResolver.then((frame) => {
+                return route.children ? this.resolveFRoute(route.children).then((children) => {
+                    return this.resolveFRouteByFrame(frame, route.params, children);
+                }) : this.resolveFRouteByFrame(frame, route.params, undefined);
+            });
+        }
+        return this.resolveFRouteByFrame(FrameResolver, route.params, route.children ? this.resolveFRoute(route.children) : undefined);
+    }
+    resolveFRouteByFrame(frame, params, children) {
+        // default params
+        params = params || {};
+        const DataClass = frame.data;
+        const ActionsClass = frame.actions;
+        const data = new DataClass({ params, context: this.config.context });
+        const initialData = data.get();
+        return {
+            frame: frame.view,
+            frameName: frame.name,
+            actions: new ActionsClass({ params, context: this.config.context }),
+            data,
+            params,
+            initialData,
+            children,
+        };
     }
     getRouteByLevel(level) {
         let currentRoute = this.currentRoute;
