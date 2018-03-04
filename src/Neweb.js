@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const neweb_core_1 = require("neweb-core");
 const React = require("react");
 const ReactDOM = require("react-dom");
-const RouterComponent_1 = require("./RouterComponent");
 class Neweb {
     constructor(configuration, options) {
         this.configuration = configuration;
@@ -22,7 +22,7 @@ class Neweb {
     }
     render(element) {
         return __awaiter(this, void 0, void 0, function* () {
-            ReactDOM.hydrate(React.createElement(RouterComponent_1.default, {
+            ReactDOM.hydrate(React.createElement(neweb_core_1.RouterComponent, {
                 router: this.router,
             }), element);
         });

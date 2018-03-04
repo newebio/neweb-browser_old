@@ -20,7 +20,7 @@
   version "22.1.4"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.1.4.tgz#5c0c06a9bb495c67e0a78002a952f151e2ae58a1"
 
-"@types/node@*":
+"@types/node@*", "@types/node@^9.4.6":
   version "9.4.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"
 
@@ -31,9 +31,13 @@
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.0.39":
+"@types/react@*":
   version "16.0.39"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.39.tgz#6aef052209521cd76f62cd7286abdc8fd787e39d"
+
+"@types/react@^16.0.40":
+  version "16.0.40"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.40.tgz#caabc2296886f40b67f6fc80f0f3464476461df9"
 
 "@types/socket.io-client@^1.4.32":
   version "1.4.32"
@@ -4323,6 +4327,13 @@ negotiator@0.6.1:
 neo-async@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
+
+neweb-core@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/neweb-core/-/neweb-core-0.0.1.tgz#1766df04d2b7ac0482b49bf8cf7a8b4470f3da56"
+  dependencies:
+    "@types/node" "^9.4.6"
+    onemitter "^0.0.10"
 
 node-dir@0.1.8:
   version "0.1.8"

@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Router_1 = require("./Router");
-class BrowserRouter extends Router_1.default {
+const neweb_core_1 = require("neweb-core");
+class BrowserRouter extends neweb_core_1.Router {
     run() {
         const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {

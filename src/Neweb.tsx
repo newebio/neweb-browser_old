@@ -1,8 +1,7 @@
+import { Router, RouterComponent } from "neweb-core";
 import React = require("react");
 import ReactDOM = require("react-dom");
 import { IConfiguration } from "./..";
-import Router from "./Router";
-import RouterComponent from "./RouterComponent";
 
 export interface INewebOptions {
     router: Router;

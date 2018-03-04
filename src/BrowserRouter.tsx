@@ -1,4 +1,4 @@
-import Router from "./Router";
+import { Router } from "neweb-core";
 
 class BrowserRouter extends Router {
     public async run() {
