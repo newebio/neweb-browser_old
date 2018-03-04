@@ -22,14 +22,29 @@ class Router {
     public async run() {
         await this.navigate(this.initialRequest.url);
     }
-    public async navigate(href: string) {
-        this.currentRoute = await this.config.configuration.resolveRoute({ url: href });
-        await this.navigateToRoute(this.currentRoute);
+    public navigate(href: string) {
+        const currentRouteResolver = this.config.configuration.resolveRoute({ url: href });
+        if (currentRouteResolver instanceof Promise) {
+            currentRouteResolver.then((cr) => {
+                this.currentRoute = cr;
+                this.navigateToRoute(this.currentRoute);
+            });
+            return;
+        }
+        const currentRoute = currentRouteResolver;
+        this.currentRoute = currentRoute;
+        this.navigateToRoute(this.currentRoute);
     }
-    public async navigateToRoute(route: IRoute) {
+    public navigateToRoute(route: IRoute) {
         this.currentRoute = route;
-        const currentFRoute = await this.resolveFRoute(route);
-        this.currentRouteEmitter.emit(currentFRoute);
+        const currentFRouteResolver = this.resolveFRoute(route);
+        if (currentFRouteResolver instanceof Promise) {
+            currentFRouteResolver.then((currentFRoute) => {
+                this.currentRouteEmitter.emit(currentFRoute);
+            });
+            return;
+        }
+        this.currentRouteEmitter.emit(currentFRouteResolver);
     }
     public async resolveFRouteWithNewParams(params: any, level: number) {
         const route = this.getRouteByLevel(level);

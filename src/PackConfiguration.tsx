@@ -1,4 +1,4 @@
-import { IActions, IConfiguration, IDataSource, IFrame, IRequest, IRoute, IRouter } from "./..";
+import { IActions, IConfiguration, IDataSource, IFrame, IRequest, IRoute, IUrlRouteResolver } from "./..";
 export interface IPackConfigurationConfig {
     frames: {
         [index: string]: {
@@ -7,10 +7,10 @@ export interface IPackConfigurationConfig {
             actions: new (params?: any) => IActions;
         };
     };
-    router: new () => IRouter;
+    router: new () => IUrlRouteResolver;
 }
 class PackConfiguration implements IConfiguration {
-    protected router: IRouter;
+    protected router: IUrlRouteResolver;
     constructor(protected config: IPackConfigurationConfig) {
         this.router = new this.config.router();
     }

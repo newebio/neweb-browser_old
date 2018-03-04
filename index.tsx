@@ -7,7 +7,7 @@ export { default as NavigateActions } from "./src/NavigateActions";
 export { default as PackConfiguration } from "./src/PackConfiguration";
 export { default as RouterComponent } from "./src/RouterComponent";
 export { default as BrowserRouter } from "./src/BrowserRouter";
-export { default as Router } from "./src/Router";
+export { default as Router, IRouterConfig } from "./src/Router";
 export { default as Link } from "./src/Link";
 export { default as UrlRouterBase } from "./src/UrlRouterBase";
 export * from "./src/UrlRouterBase";
@@ -17,6 +17,7 @@ export interface INavigateActionsProps {
 export interface IContextRouter {
     navigate: (to: string, params?: any) => void;
 }
+
 export type IAction = (...args: any[]) => void;
 export interface IActions {
     [index: string]: IAction;
@@ -30,7 +31,7 @@ export interface IFRoute {
     params: any;
     children?: IFRoute;
 }
-export interface IRouter {
+export interface IUrlRouteResolver {
     resolve: (request: IRequest) => IRoute;
     generate: (route: IRoute) => string;
 }

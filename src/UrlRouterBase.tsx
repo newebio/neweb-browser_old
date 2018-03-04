@@ -1,5 +1,5 @@
 import { parse } from "url";
-import { IRequest, IRoute, IRouter } from "./..";
+import { IRequest, IRoute, IUrlRouteResolver } from "./..";
 export interface IUrlRouterBaseConfig {
     basePath?: string;
 }
@@ -7,7 +7,7 @@ interface IUrlParams {
     path: string;
     query: string[];
 }
-export default class implements IRouter {
+export default class implements IUrlRouteResolver {
     protected basePath: string;
     constructor(protected config: IUrlRouterBaseConfig) {
         this.basePath = this.config.basePath || "/";

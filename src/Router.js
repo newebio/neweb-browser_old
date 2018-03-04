@@ -26,17 +26,28 @@ class Router {
         });
     }
     navigate(href) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.currentRoute = yield this.config.configuration.resolveRoute({ url: href });
-            yield this.navigateToRoute(this.currentRoute);
-        });
+        const currentRouteResolver = this.config.configuration.resolveRoute({ url: href });
+        if (currentRouteResolver instanceof Promise) {
+            currentRouteResolver.then((cr) => {
+                this.currentRoute = cr;
+                this.navigateToRoute(this.currentRoute);
+            });
+            return;
+        }
+        const currentRoute = currentRouteResolver;
+        this.currentRoute = currentRoute;
+        this.navigateToRoute(this.currentRoute);
     }
     navigateToRoute(route) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.currentRoute = route;
-            const currentFRoute = yield this.resolveFRoute(route);
-            this.currentRouteEmitter.emit(currentFRoute);
-        });
+        this.currentRoute = route;
+        const currentFRouteResolver = this.resolveFRoute(route);
+        if (currentFRouteResolver instanceof Promise) {
+            currentFRouteResolver.then((currentFRoute) => {
+                this.currentRouteEmitter.emit(currentFRoute);
+            });
+            return;
+        }
+        this.currentRouteEmitter.emit(currentFRouteResolver);
     }
     resolveFRouteWithNewParams(params, level) {
         return __awaiter(this, void 0, void 0, function* () {
