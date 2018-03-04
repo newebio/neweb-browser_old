@@ -1,4 +1,3 @@
-import { IRequest } from "./..";
 import Router from "./Router";
 
 class BrowserRouter extends Router {

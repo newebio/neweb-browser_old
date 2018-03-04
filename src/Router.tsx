@@ -1,5 +1,5 @@
 import o, { Onemitter } from "onemitter";
-import { IConfiguration, IFrame, IFRoute, IRequest, IRoute } from "..";
+import { IConfiguration, IFrame, IFRoute, IRoute } from "..";
 
 export interface IRouterConfig {
     configuration: IConfiguration;
@@ -14,7 +14,8 @@ class Router {
     };
     constructor(protected config: IRouterConfig) {
         this.currentRouteEmitter = o();
-
+        config.context.router = this;
+        config.context.currentRoute = this.currentRouteEmitter;
     }
     public getCurrentRouteEmitter() {
         return this.currentRouteEmitter;

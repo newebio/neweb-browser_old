@@ -15,10 +15,7 @@ class Neweb {
     constructor(configuration, options) {
         this.configuration = configuration;
         this.options = options;
-        this.context = this.options.context || {};
         this.router = this.options.router;
-        this.context.router = this.router;
-        this.context.currentRoute = this.router.getCurrentRouteEmitter();
     }
     getRouter() {
         return this.router;
@@ -27,7 +24,7 @@ class Neweb {
         return __awaiter(this, void 0, void 0, function* () {
             ReactDOM.hydrate(React.createElement(RouterComponent_1.default, {
                 router: this.router,
-                context: this.context,
+                context: this.options.context,
             }), element);
         });
     }

@@ -10,12 +10,8 @@ export interface INewebOptions {
 }
 class Neweb {
     protected router: Router;
-    protected context: any;
     constructor(protected configuration: IConfiguration, protected options: INewebOptions) {
-        this.context = this.options.context || {};
         this.router = this.options.router;
-        this.context.router = this.router;
-        this.context.currentRoute = this.router.getCurrentRouteEmitter();
     }
     public getRouter() {
         return this.router;
@@ -23,7 +19,7 @@ class Neweb {
     public async render(element: HTMLElement | null) {
         ReactDOM.hydrate(React.createElement(RouterComponent, {
             router: this.router,
-            context: this.context,
+            context: this.options.context,
         }), element);
     }
 }

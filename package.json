@@ -1,6 +1,6 @@
 {
   "name": "neweb-browser",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -32,12 +32,10 @@
     "webpack-dev-server": "^3.1.0"
   },
   "dependencies": {
-    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.39",
     "@types/react-dom": "^16.0.4",
     "@types/socket.io-client": "^1.4.32",
-    "onemitter": "^0.0.9",
-    "prop-types": "^15.6.1",
+    "onemitter": "^0.0.10",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "socket.io-client": "^2.0.4"

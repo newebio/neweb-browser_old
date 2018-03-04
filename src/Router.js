@@ -16,6 +16,8 @@ class Router {
             url: "/",
         };
         this.currentRouteEmitter = onemitter_1.default();
+        config.context.router = this;
+        config.context.currentRoute = this.currentRouteEmitter;
     }
     getCurrentRouteEmitter() {
         return this.currentRouteEmitter;
