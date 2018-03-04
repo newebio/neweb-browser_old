@@ -4,8 +4,9 @@ import { IConfiguration, IFrame, IFRoute, IRoute } from "..";
 export interface IRouterConfig {
     configuration: IConfiguration;
     context: any;
+    initialData: InitialData;
 }
-
+type InitialData = any[] | undefined;
 class Router {
     protected currentRouteEmitter: Onemitter<IFRoute>;
     protected currentRoute: IRoute;
@@ -21,31 +22,10 @@ class Router {
         return this.currentRouteEmitter;
     }
     public async run() {
-        await this.navigate(this.initialRequest.url);
+        await this.navigateWithInitialData(this.initialRequest.url, this.config.initialData);
     }
     public navigate(href: string) {
-        const currentRouteResolver = this.config.configuration.resolveRoute({ url: href });
-        if (currentRouteResolver instanceof Promise) {
-            currentRouteResolver.then((cr) => {
-                this.currentRoute = cr;
-                this.navigateToRoute(this.currentRoute);
-            });
-            return;
-        }
-        const currentRoute = currentRouteResolver;
-        this.currentRoute = currentRoute;
-        this.navigateToRoute(this.currentRoute);
-    }
-    public navigateToRoute(route: IRoute) {
-        this.currentRoute = route;
-        const currentFRouteResolver = this.resolveFRoute(route);
-        if (currentFRouteResolver instanceof Promise) {
-            currentFRouteResolver.then((currentFRoute) => {
-                this.currentRouteEmitter.emit(currentFRoute);
-            });
-            return;
-        }
-        this.currentRouteEmitter.emit(currentFRouteResolver);
+        return this.navigateWithInitialData(href);
     }
     public async resolveFRouteWithNewParams(params: any, level: number) {
         const route = this.getRouteByLevel(level);
@@ -54,30 +34,64 @@ class Router {
             currentRoute = currentRoute.children as IRoute;
         }
         currentRoute.params = params;
-        const fRoute = await this.resolveFRoute({ ...route, params });
+        const fRoute = await this.resolveFRoute({ ...route, params }, undefined, level);
         return fRoute;
     }
-    public resolveFRoute(route: IRoute): Promise<IFRoute> | IFRoute {
+    protected navigateWithInitialData(href: string, initialData?: InitialData) {
+        const currentRouteResolver = this.config.configuration.resolveRoute({ url: href });
+        if (currentRouteResolver instanceof Promise) {
+            currentRouteResolver.then((cr) => {
+                this.currentRoute = cr;
+                this.navigateToRoute(this.currentRoute, initialData);
+            });
+            return;
+        }
+        const currentRoute = currentRouteResolver;
+        this.currentRoute = currentRoute;
+        this.navigateToRoute(this.currentRoute, initialData);
+    }
+    protected navigateToRoute(route: IRoute, initialData: InitialData) {
+        this.currentRoute = route;
+        const currentFRouteResolver = this.resolveFRoute(route, initialData);
+        if (currentFRouteResolver instanceof Promise) {
+            currentFRouteResolver.then((currentFRoute) => {
+                this.currentRouteEmitter.emit(currentFRoute);
+            });
+            return;
+        }
+        this.currentRouteEmitter.emit(currentFRouteResolver);
+    }
+    protected resolveFRoute(route: IRoute, initialData: InitialData, level = 0): Promise<IFRoute> | IFRoute {
         // Resolving frame view component
         const FrameResolver = this.config.configuration.resolveFrame(route.frame);
         if (FrameResolver instanceof Promise) {
             return FrameResolver.then((frame) => {
-                return route.children ? (this.resolveFRoute(route.children) as Promise<IFRoute>).then((children) => {
-                    return this.resolveFRouteByFrame(frame, route.params, children);
-                }) : this.resolveFRouteByFrame(frame, route.params, undefined);
+                return route.children ?
+                    (this.resolveFRoute(route.children, initialData, level + 1) as Promise<IFRoute>)
+                        .then((children) => {
+                            return this.resolveFRouteByFrame(frame, route.params, children,
+                                initialData ? initialData[level] : undefined);
+                        }) : this.resolveFRouteByFrame(frame, route.params, undefined,
+                            initialData ? initialData[level] : undefined);
             });
         }
         return this.resolveFRouteByFrame(
             FrameResolver,
             route.params,
-            route.children ? (this.resolveFRoute(route.children) as IFRoute) : undefined);
+            route.children ? (this.resolveFRoute(route.children, initialData, level + 1) as IFRoute) : undefined,
+            initialData ? initialData[level] : undefined,
+        );
     }
-    protected resolveFRouteByFrame(frame: IFrame, params: any, children: IFRoute | undefined) {
+    protected resolveFRouteByFrame(frame: IFrame, params: any, children: IFRoute | undefined, savedData: any) {
         // default params
         params = params || {};
         const DataClass = frame.data;
         const ActionsClass = frame.actions;
-        const data = new DataClass({ params, context: this.config.context });
+        const data = new DataClass({
+            params,
+            context: this.config.context,
+            data: savedData,
+        });
         const initialData = data.get();
         return {
             frame: frame.view,

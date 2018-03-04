@@ -40,7 +40,14 @@ export interface IConfiguration {
     generateUrl(route: IRoute): string;
     resolveFrame(frame: string): IFrame | Promise<IFrame>;
 }
-export type IDataSource<T> = Onemitter<T>;
+export interface IDataSource<T> extends Onemitter<T> {
+    getInitialData(): Promise<T>;
+}
+export interface IDataSourceConfig<P, D, C> {
+    params: P;
+    context: C;
+    data: D;
+}
 export interface IFrame {
     name: string;
     view: React.ComponentClass<any>;

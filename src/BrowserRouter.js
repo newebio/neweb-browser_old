@@ -18,7 +18,7 @@ class BrowserRouter extends Router_1.default {
             };
             _super("run").call(this);
             window.addEventListener("popstate", (e) => {
-                this.navigateToRoute(e.state);
+                this.navigateToRoute(e.state, undefined);
             }, false);
         });
     }

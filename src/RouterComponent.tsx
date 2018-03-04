@@ -6,7 +6,6 @@ import Router from "./Router";
 
 export default class extends React.Component<{
     router: Router;
-    context: any;
 }, {
         currentRoute?: IFRoute;
     }> {

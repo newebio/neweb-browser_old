@@ -5,7 +5,6 @@ import Router from "./Router";
 import RouterComponent from "./RouterComponent";
 
 export interface INewebOptions {
-    context: any;
     router: Router;
 }
 class Neweb {
@@ -19,7 +18,6 @@ class Neweb {
     public async render(element: HTMLElement | null) {
         ReactDOM.hydrate(React.createElement(RouterComponent, {
             router: this.router,
-            context: this.options.context,
         }), element);
     }
 }

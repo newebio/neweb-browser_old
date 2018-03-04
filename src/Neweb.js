@@ -24,7 +24,6 @@ class Neweb {
         return __awaiter(this, void 0, void 0, function* () {
             ReactDOM.hydrate(React.createElement(RouterComponent_1.default, {
                 router: this.router,
-                context: this.options.context,
             }), element);
         });
     }

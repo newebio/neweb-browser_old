@@ -7,7 +7,7 @@ class BrowserRouter extends Router {
         };
         super.run();
         window.addEventListener("popstate", (e) => {
-            this.navigateToRoute(e.state);
+            this.navigateToRoute(e.state, undefined);
         }, false);
     }
     public async navigate(href: string, replace?: boolean) {
