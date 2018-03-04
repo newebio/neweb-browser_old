@@ -1,5 +1,6 @@
 import { Onemitter } from "onemitter";
 import Neweb from "./src/Neweb";
+import Router from "./src/Router";
 export { Onemitter as DataSource } from "onemitter";
 export { default as Neweb } from "./src/Neweb";
 export * from "./src/Neweb";
@@ -44,9 +45,13 @@ export interface IConfiguration {
 export interface IDataSource<T> extends Onemitter<T> {
     getInitialData(): Promise<T>;
 }
+export interface IDefaulContext {
+    currentRoute: Onemitter<IFRoute>;
+    router: Router;
+}
 export interface IDataSourceConfig<P, D, C> {
     params: P;
-    context: C;
+    context: C & IDefaulContext;
     data: D;
 }
 export interface IFrame {

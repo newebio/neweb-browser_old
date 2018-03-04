@@ -30,7 +30,7 @@ class Router {
     navigate(href) {
         return this.navigateWithInitialData(href);
     }
-    waitInitialData() {
+    getInitialData() {
         return __awaiter(this, void 0, void 0, function* () {
             let currentFRoute = yield this.currentRouteEmitter.wait();
             const datas = [];
@@ -39,7 +39,7 @@ class Router {
                 currentFRoute = currentFRoute.children;
             }
             const promises = datas.map((d) => d.wait());
-            yield Promise.all(promises);
+            return Promise.all(promises);
         });
     }
     resolveFRouteWithNewParams(params, level) {

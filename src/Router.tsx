@@ -27,7 +27,7 @@ class Router {
     public navigate(href: string) {
         return this.navigateWithInitialData(href);
     }
-    public async waitInitialData() {
+    public async getInitialData() {
         let currentFRoute: IFRoute | undefined = await this.currentRouteEmitter.wait();
         const datas: Array<IDataSource<any>> = [];
         while (!!currentFRoute) {
@@ -35,7 +35,7 @@ class Router {
             currentFRoute = currentFRoute.children;
         }
         const promises = datas.map((d) => d.wait());
-        await Promise.all(promises);
+        return Promise.all(promises);
     }
     public async resolveFRouteWithNewParams(params: any, level: number) {
         const route = this.getRouteByLevel(level);
