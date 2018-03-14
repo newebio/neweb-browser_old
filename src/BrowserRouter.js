@@ -10,17 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const neweb_core_1 = require("neweb-core");
 class BrowserRouter extends neweb_core_1.Router {
-    run() {
-        const _super = name => super[name];
-        return __awaiter(this, void 0, void 0, function* () {
-            this.initialRequest = {
-                url: window.location.href,
-            };
-            _super("run").call(this);
-            window.addEventListener("popstate", (e) => {
-                this.navigateToRoute(e.state, undefined);
-            }, false);
-        });
+    constructor(config) {
+        super(config);
+        this.config = config;
+        this.initialRequest = {
+            url: window.location.href,
+        };
+        window.addEventListener("popstate", (e) => {
+            this.navigateToRoute(e.state, undefined);
+        }, false);
+        this.currentRouteStateEmitter.on(() => this.updateHistoryState());
     }
     navigate(href, replace) {
         const _super = name => super[name];
@@ -32,14 +31,6 @@ class BrowserRouter extends neweb_core_1.Router {
             else {
                 window.history.replaceState(this.currentRoute, "", href);
             }
-        });
-    }
-    resolveFRouteWithNewParams(params, level) {
-        const _super = name => super[name];
-        return __awaiter(this, void 0, void 0, function* () {
-            const fRoute = yield _super("resolveFRouteWithNewParams").call(this, params, level);
-            this.updateHistoryState();
-            return fRoute;
         });
     }
     updateHistoryState() {

@@ -1,14 +1,15 @@
-import { Router } from "neweb-core";
+import { IRouterConfig, Router } from "neweb-core";
 
 class BrowserRouter extends Router {
-    public async run() {
+    constructor(protected config: IRouterConfig) {
+        super(config);
         this.initialRequest = {
             url: window.location.href,
         };
-        super.run();
         window.addEventListener("popstate", (e) => {
             this.navigateToRoute(e.state, undefined);
         }, false);
+        this.currentRouteStateEmitter.on(() => this.updateHistoryState());
     }
     public async navigate(href: string, replace?: boolean) {
         await super.navigate(href);
@@ -18,12 +19,7 @@ class BrowserRouter extends Router {
             window.history.replaceState(this.currentRoute, "", href);
         }
     }
-    public async resolveFRouteWithNewParams(params: any, level: number) {
-        const fRoute = await super.resolveFRouteWithNewParams(params, level);
-        this.updateHistoryState();
-        return fRoute;
-    }
-    public updateHistoryState() {
+    protected updateHistoryState() {
         window.history.replaceState(this.currentRoute, "", this.config.configuration.generateUrl(this.currentRoute));
     }
 }

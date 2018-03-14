@@ -1,5 +1,4 @@
 import Neweb from "./src/Neweb";
-export { Onemitter as DataSource } from "onemitter";
 export { default as Neweb } from "./src/Neweb";
 export * from "./src/Neweb";
 export * from "./src/PackConfiguration";
