@@ -4328,12 +4328,13 @@ neo-async@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
 
-neweb-core@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/neweb-core/-/neweb-core-0.0.1.tgz#1766df04d2b7ac0482b49bf8cf7a8b4470f3da56"
+neweb-core@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/neweb-core/-/neweb-core-0.1.9.tgz#f1561c7256ca6058e518989d331bdc79efb8b6d2"
   dependencies:
     "@types/node" "^9.4.6"
-    onemitter "^0.0.10"
+    onemitter "^0.2.2"
+    url "^0.11.0"
 
 node-dir@0.1.8:
   version "0.1.8"
@@ -4529,9 +4530,9 @@ once@^1.3.0, once@^1.3.1, once@^1.3.3, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-onemitter@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/onemitter/-/onemitter-0.0.10.tgz#55a588d19e017cf0d7190e27547e710cd699c354"
+onemitter@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/onemitter/-/onemitter-0.2.2.tgz#5c85e00a410fce444d60c3e3a8f23277c1dbf45b"
 
 onetime@^1.0.0:
   version "1.1.0"

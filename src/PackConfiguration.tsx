@@ -1,11 +1,7 @@
-import { IActions, IConfiguration, IDataSource, IFrame, IRequest, IRoute, IUrlRouteResolver } from "./..";
+import { IConfiguration, IFrame, IRequest, IRoute, IUrlRouteResolver } from "./..";
 export interface IPackConfigurationConfig {
     frames: {
-        [index: string]: {
-            view: React.ComponentClass<any>;
-            data: new (params?: any) => IDataSource<any>;
-            actions: new (params?: any) => IActions;
-        };
+        [index: string]: IFrame;
     };
     router: new () => IUrlRouteResolver;
 }
